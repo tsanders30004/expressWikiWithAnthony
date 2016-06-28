@@ -29,6 +29,44 @@ app.post('/login-submit', function(request, response) {
      }
 });
 
+app.get('/:pageName/edit', function(request, response) {
+     var pageName = request.params.pageName;
+     var pageContents = request.params.fileContent;
+     console.log('i think we have to read the file contents from the text file since no way to pass it back from *.hbs file');
+
+     /* start here */
+     var fn = 'pages/' + pageName + '.txt';
+     console.log('filenameX = ' + fn);
+     fs.readFile(fn, function(err, data){
+          if (err) {
+               console.log('another error');
+               console.error(err);
+               return;
+          }
+          var fileData = data;
+          console.log('the file data is ' + data);
+     });
+     /* end here */
+
+     response.render('edit.hbs', {
+          title: 'Edit ' + pageName,
+          pageName: pageName
+     });
+});
+
+app.post('/:pageName/save', function(request, response) {
+     var pageName = request.params.pageName;
+     var content = request.body.content;
+     var filename = 'pages/' + pageName + '.txt';
+     fs.writeFile(filename, content, function(err) {
+          response.redirect('/' + pageName);
+     });
+});
+
+app.listen(3000, function() {
+     console.log('Listening on port 3000.');
+});
+
 app.get('/:pageName', function(request, response) {
      var title = request.params.pageName;
      var pageName = request.params.pageName;
@@ -52,25 +90,4 @@ app.get('/:pageName', function(request, response) {
                wikiContent : wikiContent,
                pageName : pageName});
           });
-     });
-
-     app.get('/:pageName/edit', function(request, response) {
-          var pageName = request.params.pageName;
-          response.render('edit.hbs', {
-               title: 'Edit ' + pageName,
-               pageName: pageName
-          });
-     });
-
-     app.post('/:pageName/save', function(request, response) {
-          var pageName = request.params.pageName;
-          var content = request.body.content;
-          var filename = 'pages/' + pageName + '.txt';
-          fs.writeFile(filename, content, function(err) {
-               response.redirect('/' + pageName);
-          });
-     });
-
-     app.listen(3000, function() {
-          console.log('Listening on port 3000.');
      });
