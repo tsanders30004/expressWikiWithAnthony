@@ -25,7 +25,7 @@ app.post('/login-submit', function(request, response) {
      if (name === 'anthony' && password === '123') {
           console.log('login correct');
           /* need to somehow create a (new?) session */
-          request.session.user = name;
+          // request.session.user = name;
           response.redirect('/');
      } else {
           console.log('login incorrect');
@@ -84,6 +84,7 @@ app.get('/:pageName', function(request, response) {
           /* i.e., file does not exist */
           if (err){
                console.log('file does not exist.  creeating file via placeholder.hbs');
+               console.error(err);
                response.render('placeholder', {title : title});
                return;
           }
