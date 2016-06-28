@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var session = require('express-session');
+
 var app = express();
 var wikiLinkify = require('wiki-linkify');
 
@@ -22,6 +24,8 @@ app.post('/login-submit', function(request, response) {
      console.log('password = ' + name);
      if (name === 'anthony' && password === '123') {
           console.log('login correct');
+          /* need to somehow create a (new?) session */
+          request.session.user = name;
           response.redirect('/');
      } else {
           console.log('login incorrect');
@@ -49,7 +53,7 @@ app.get('/:pageName/edit', function(request, response) {
           response.render('edit.hbs', {
                title: 'Edit ' + pageName,
                pageName: pageName,
-               fileData: fileData 
+               fileData: fileData
           });
      });
      /* end here */
