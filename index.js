@@ -45,13 +45,15 @@ app.get('/:pageName/edit', function(request, response) {
           }
           var fileData = data;
           console.log('the file data is ' + data);
+
+          response.render('edit.hbs', {
+               title: 'Edit ' + pageName,
+               pageName: pageName,
+               fileData: fileData 
+          });
      });
      /* end here */
 
-     response.render('edit.hbs', {
-          title: 'Edit ' + pageName,
-          pageName: pageName
-     });
 });
 
 app.post('/:pageName/save', function(request, response) {
@@ -89,5 +91,5 @@ app.get('/:pageName', function(request, response) {
           response.render('extrapage', {fileContent : fileContent,
                wikiContent : wikiContent,
                pageName : pageName});
-          });
      });
+});
