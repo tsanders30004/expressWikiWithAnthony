@@ -1,10 +1,10 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var fs = require('fs');
-var session = require('express-session');
+var express         = require('express');
+var bodyParser      = require('body-parser');
+var fs              = require('fs');
+var session         = require('express-session');
+var wikiLinkify     = require('wiki-linkify');
 
 var app = express();
-var wikiLinkify = require('wiki-linkify');
 
 app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,11 +24,11 @@ app.post('/login-submit', function(request, response) {
      console.log('password = ' + name);
      if (name === 'anthony' && password === '123') {
           console.log('login correct');
-          /* need to somehow create a (new?) session */
-          // request.session.user = name;
+          /* create a new session */
+          request.session.user = name;
           response.redirect('/');
      } else {
-          console.log('login incorrect');
+          console.log('login incorrect.  should send user back to the login page');
           response.redirect('/login');
      }
 });
@@ -69,10 +69,6 @@ app.post('/:pageName/save', function(request, response) {
      });
 });
 
-app.listen(3000, function() {
-     console.log('Listening on port 3000.');
-});
-
 app.get('/:pageName', function(request, response) {
      var title = request.params.pageName;
      var pageName = request.params.pageName;
@@ -97,4 +93,8 @@ app.get('/:pageName', function(request, response) {
                wikiContent : wikiContent,
                pageName : pageName});
      });
+});
+
+app.listen(3000, function() {
+     console.log('Listening on port 3000.');
 });
